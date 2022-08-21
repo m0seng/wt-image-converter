@@ -150,29 +150,32 @@ class ConverterFrame(ttk.Frame):
         self.var_status.set("Conversion started...")
         start_time = perf_counter()
         converted_counter = 0
+
         for path in self.input_filenames:
             filename = os.path.basename(path)
             name = filename[:-4]
             extension = filename[-4:]
-            if extension == ".wav":
-                wavetable2image(
-                    path,
-                    f"{self.output_dir}/{name}.png",
-                    frame_size=self.var_frame_size.get(),
-                    limit_partials=self.var_limit_partials.get(),
-                    partial_cutoff=self.var_partial_cutoff.get(),
-                    allow_incomplete=self.var_allow_incomplete.get()
-                )
-                converted_counter += 1
-            elif extension == ".png":
-                image2wavetable(
-                    path,
-                    f"{self.output_dir}/{name}.wav",
-                    frame_size=self.var_frame_size.get()
-                )
-                converted_counter += 1
-            else:
-                pass
+            try:
+                if extension == ".wav":
+                    wavetable2image(
+                        path,
+                        f"{self.output_dir}/{name}.png",
+                        frame_size=self.var_frame_size.get(),
+                        limit_partials=self.var_limit_partials.get(),
+                        partial_cutoff=self.var_partial_cutoff.get(),
+                        allow_incomplete=self.var_allow_incomplete.get()
+                    )
+                    converted_counter += 1
+                elif extension == ".png":
+                    image2wavetable(
+                        path,
+                        f"{self.output_dir}/{name}.wav",
+                        frame_size=self.var_frame_size.get()
+                    )
+                    converted_counter += 1
+            except ValueError as e:
+                self.var_status.set(e)
+                
         elapsed = perf_counter() - start_time
         self.var_status.set(f"Converted {converted_counter} file(s) in {elapsed:.3f} s.")
 
