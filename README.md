@@ -14,4 +14,4 @@ Then run `python main.py` to bring up the converter GUI.
 
 ## Notes
 
-Look at `converters.py` if you want but don't open `main.py` unless you want to be confronted with a spaghetti mess of wrangling with Tkinter.
+Look at `converters.py` if you want (it's quite interesting) but don't open `main.py` unless you want to be confronted with a spaghetti mess of wrangling with Tkinter.

@@ -58,7 +58,7 @@ class ConverterFrame(ttk.Frame):
 
         self.update_path_vars()
 
-    def expand(frame: ttk.Frame):
+    def expand(self, frame: ttk.Frame):
         for child in frame.winfo_children(): 
             child.grid_configure(sticky="ew", padx=3, pady=3)
 
