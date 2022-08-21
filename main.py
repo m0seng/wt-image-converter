@@ -175,7 +175,8 @@ class ConverterFrame(ttk.Frame):
                     converted_counter += 1
             except ValueError as e:
                 self.var_status.set(e)
-                
+                return
+
         elapsed = perf_counter() - start_time
         self.var_status.set(f"Converted {converted_counter} file(s) in {elapsed:.3f} s.")
 
