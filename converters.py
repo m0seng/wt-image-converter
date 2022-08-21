@@ -109,18 +109,3 @@ def hsv2wave(
     wave *= norm_ratio
 
     return wave
-
-
-# def main():
-#     audio, rate = sf.read("data/sawdisp.wav")
-#     img_array = wave2hsv(audio)
-#     new_audio = hsv2wave(img_array).astype(np.float32)
-#     sf.write("newsawdisp.wav", new_audio, samplerate=44100)
-
-#     img = PIL.Image.fromarray(img_array, mode="HSV")
-#     img = img.convert("RGB")
-#     img = img.transpose(2) # rotate anti-clockwise 90 degrees
-#     img.save("sawdisp.png")
-
-# if __name__ == "__main__":
-#     main()

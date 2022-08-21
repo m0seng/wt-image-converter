@@ -26,10 +26,6 @@ def image2wavetable(input: str, output: str, **kwargs):
     audio = conv.hsv2wave(hsv_array, **kwargs).astype(np.float32)
     sf.write(output, audio, samplerate=44100)
 
-def expand(frame: ttk.Frame):
-    for child in frame.winfo_children(): 
-        child.grid_configure(sticky="ew", padx=3, pady=3)
-
 class ConverterFrame(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -58,9 +54,13 @@ class ConverterFrame(ttk.Frame):
         self.btn_convert.grid(column=0, row=3)
         self.lbl_status.grid(column=0, row=4)
 
-        expand(self)
+        self.expand(self)
 
         self.update_path_vars()
+
+    def expand(frame: ttk.Frame):
+        for child in frame.winfo_children(): 
+            child.grid_configure(sticky="ew", padx=3, pady=3)
 
     def init_tk_vars(self):
         self.var_input_path = tk.StringVar()
@@ -77,7 +77,7 @@ class ConverterFrame(ttk.Frame):
         btn_input_browse = ttk.Button(lf_input, text="Browse...", command=self.input_dialog)
         lbl_input_path.grid(column=0, row=0)
         btn_input_browse.grid(column=0, row=1)
-        expand(lf_input)
+        self.expand(lf_input)
         return lf_input
 
     def make_output_frame(self):
@@ -86,7 +86,7 @@ class ConverterFrame(ttk.Frame):
         btn_output_browse = ttk.Button(lf_output, text="Browse...", command=self.output_dialog)
         lbl_output_path.grid(column=0, row=0)
         btn_output_browse.grid(column=0, row=1)
-        expand(lf_output)
+        self.expand(lf_output)
         return lf_output
 
     def make_options_frame(self):
@@ -116,7 +116,7 @@ class ConverterFrame(ttk.Frame):
         box_partial_cutoff.grid(column=0, row=4)
         tick_allow_incomplete.grid(column=0, row=5)
 
-        expand(lf_options)
+        self.expand(lf_options)
 
         return lf_options
 
