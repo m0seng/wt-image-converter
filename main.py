@@ -68,6 +68,7 @@ class ConverterFrame(ttk.Frame):
         self.var_frame_size = tk.IntVar(value=2048)
         self.var_limit_partials = tk.BooleanVar(value=False)
         self.var_partial_cutoff = tk.IntVar(value=256)
+        self.var_include_dc_offset = tk.BooleanVar(value=True)
         self.var_allow_incomplete = tk.BooleanVar(value=True)
         self.var_status = tk.StringVar(value="hacked together by mos")
 
@@ -103,6 +104,7 @@ class ConverterFrame(ttk.Frame):
         tick_limit_partials = ttk.Checkbutton(lf_options, text="Limit partials?", variable=self.var_limit_partials, command=toggle_cutoff_box)
         lbl_partial_cutoff = ttk.Label(lf_options, text="Partial cutoff:")
         box_partial_cutoff = ttk.Combobox(lf_options, textvariable=self.var_partial_cutoff)
+        tick_include_dc_offset = ttk.Checkbutton(lf_options, text="Include DC offset?", variable=self.var_include_dc_offset)
         tick_allow_incomplete = ttk.Checkbutton(lf_options, text="Allow incomplete frames?", variable=self.var_allow_incomplete)
         
         box_frame_size["values"] = (1024, 2048, 4096)
@@ -161,6 +163,7 @@ class ConverterFrame(ttk.Frame):
                         path,
                         f"{self.output_dir}/{name}.png",
                         frame_size=self.var_frame_size.get(),
+                        include_dc_offset=self.var_include_dc_offset.get(),
                         limit_partials=self.var_limit_partials.get(),
                         partial_cutoff=self.var_partial_cutoff.get(),
                         allow_incomplete=self.var_allow_incomplete.get()
@@ -170,7 +173,8 @@ class ConverterFrame(ttk.Frame):
                     image2wavetable(
                         path,
                         f"{self.output_dir}/{name}.wav",
-                        frame_size=self.var_frame_size.get()
+                        frame_size=self.var_frame_size.get(),
+                        include_dc_offset=self.var_include_dc_offset.get()
                     )
                     converted_counter += 1
             except ValueError as e:

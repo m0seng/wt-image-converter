@@ -4,6 +4,7 @@ import scipy.fft
 def wave2hsv(
     wave: np.ndarray,
     frame_size: int = 2048,
+    include_dc_offset: bool = True,
     limit_partials: bool = False,
     partial_cutoff: int = None,
     allow_incomplete: bool = True
@@ -32,6 +33,10 @@ def wave2hsv(
     # FFT frames in parallel
     frames_fft: np.ndarray = scipy.fft.rfft(frames, axis=1)
 
+    # handle DC offset
+    if not include_dc_offset:
+        frames_fft = frames_fft[:,1:]
+
     # limit partials
     if limit_partials and partial_cutoff < frames_fft.shape[1]:
         frames_fft = frames_fft[:,:partial_cutoff]
@@ -43,7 +48,10 @@ def wave2hsv(
 
     # scale magnitudes by partial number
     magnitude_multipliers = np.arange(fft_size)
-    magnitude_multipliers[0] = 1 # don't delete the DC offset!
+    if include_dc_offset:
+        magnitude_multipliers[0] = 1 # don't delete the DC offset!
+    else:
+        magnitude_multipliers += 1 # without DC offset partials start at the fundamental
     magnitudes *= magnitude_multipliers
 
     # normalize magnitudes
@@ -71,12 +79,14 @@ def wave2hsv(
 def hsv2wave(
     hsv: np.ndarray,
     frame_size: int = 2048,
+    include_dc_offset: bool = True
 ) -> np.ndarray:
 
     IMAGE_MAX_VALUE = 256
     PHASE_OFFSET = 0
     TWO_PI = 2 * np.pi
 
+    frame_count = hsv.shape[0]
     fft_size = hsv.shape[1]
 
     # get hues and values
@@ -89,7 +99,10 @@ def hsv2wave(
 
     # scale magnitudes by partial number
     magnitude_multipliers = np.arange(fft_size)
-    magnitude_multipliers[0] = 1 # don't delete the DC offset!
+    if include_dc_offset:
+        magnitude_multipliers[0] = 1 # don't delete the DC offset!
+    else:
+        magnitude_multipliers += 1 # without DC offset partials start at the fundamental
     magnitudes *= (1 / magnitude_multipliers)
 
     # calculate phases
@@ -97,6 +110,11 @@ def hsv2wave(
 
     # calculate complex form of partials
     frames_fft = magnitudes * np.exp(1j * phases)
+
+    # reintroduce DC offset if needed
+    if not include_dc_offset:
+        new_dc_offset = np.zeros((frame_count, 1)) # generate zeros in the right shape
+        frames_fft = np.hstack((new_dc_offset, frames_fft)) # stack along axis 1
 
     # inverse FFT frames in parallel
     frames: np.ndarray = scipy.fft.irfft(frames_fft, frame_size, axis=1)
