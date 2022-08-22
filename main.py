@@ -1,12 +1,12 @@
 import numpy as np
 import soundfile as sf
 from PIL import Image
-import converters as conv
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog as fd
 import os.path
 from time import perf_counter
+import converters as conv
 
 def wavetable2image(input: str, output: str, **kwargs):
     audio, rate = sf.read(input)
