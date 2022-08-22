@@ -193,9 +193,10 @@ class ConverterFrame(ttk.Frame):
 def main():
     window = tk.Tk()
     window.title("wt/image converter")
+    window.resizable(False, False)
+    window.columnconfigure(0, weight=1)
     frame = ConverterFrame(window)
     frame.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
-    frame.columnconfigure(0, weight=1)
     window.mainloop()
 
 if __name__ == "__main__":
