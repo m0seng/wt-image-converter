@@ -14,6 +14,6 @@ Then run `python main.py` to bring up the converter GUI.
 
 ## Notes
 
-The GUI is mostly self-explanatory, but be careful with the "Include DC offset" option - turning it off will remove the DC offset from the converted image, so keep it turned off when converting back so the program knows to reintroduce it.
+The GUI is mostly self-explanatory, but be careful with the "Include DC offset" option - turning it off will remove the DC offset from the converted image, so keep it turned off when converting back so the program knows to reintroduce it. This can be useful for manipulations such as rotating the image, where keeping the DC offset in the image would otherwise introduce wild fluctuations in DC offset upon conversion back to a wavetable.
 
 Look at `converters.py` if you want (it's quite interesting) but don't open `main.py` unless you want to be confronted with a spaghetti mess of wrangling with Tkinter.
