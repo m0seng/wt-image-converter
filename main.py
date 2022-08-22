@@ -4,7 +4,7 @@ from PIL import Image
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog as fd
-import os.path
+import os
 from time import perf_counter
 import converters as conv
 
@@ -30,6 +30,7 @@ class ConverterFrame(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)
+        self.spacing = self.winfo_fpixels("1m")
 
         self.label_width = 30
         self.filetypes = (
@@ -60,7 +61,7 @@ class ConverterFrame(ttk.Frame):
 
     def expand(self, frame: ttk.Frame):
         for child in frame.winfo_children(): 
-            child.grid_configure(sticky="ew", padx=3, pady=3)
+            child.grid_configure(sticky="ew", padx=self.spacing, pady=self.spacing)
 
     def init_tk_vars(self):
         self.var_input_path = tk.StringVar()
@@ -191,12 +192,18 @@ class ConverterFrame(ttk.Frame):
 
 
 def main():
+    # DPI awareness on Windows
+    if os.name == "nt":
+        from ctypes import windll
+        windll.shcore.SetProcessDpiAwareness(1)
+
+    # create window
     window = tk.Tk()
     window.title("wt/image converter")
     window.resizable(False, False)
     window.columnconfigure(0, weight=1)
     frame = ConverterFrame(window)
-    frame.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
+    frame.grid(column=0, row=0, sticky="nsew", padx=frame.spacing, pady=frame.spacing)
     window.mainloop()
 
 if __name__ == "__main__":
