@@ -70,7 +70,7 @@ class ConverterFrame(ttk.Frame):
         self.var_partial_cutoff = tk.IntVar(value=256)
         self.var_include_dc_offset = tk.BooleanVar(value=True)
         self.var_allow_incomplete = tk.BooleanVar(value=True)
-        self.var_status = tk.StringVar(value="hacked together by mos")
+        self.var_status = tk.StringVar(value="made by mos")
 
     def make_input_frame(self):
         lf_input = ttk.Labelframe(self, text="Input")
@@ -152,6 +152,11 @@ class ConverterFrame(ttk.Frame):
         self.var_status.set("Conversion started...")
         start_time = perf_counter()
         converted_counter = 0
+
+        # forgor to set output directory?
+        if self.output_dir == "":
+            self.var_status.set("Please select an output directory...")
+            return
 
         for path in self.input_filenames:
             filename = os.path.basename(path)
